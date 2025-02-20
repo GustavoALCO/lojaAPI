@@ -1,7 +1,10 @@
-﻿namespace loja_api.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace loja_api.Entities;
 
 public class Products
 {
+    [Key]
     public Guid IdProducts { get; set; }
 
     public string ProductName { get; set; }
@@ -12,11 +15,11 @@ public class Products
 
     public string TypeProduct { get; set; }
 
-    public double price { get; set; }
+    public double Price { get; set; }
 
     public int QuantityStorage {  get; set; }
 
-    public ICollection<Storage> storages { get; set; }
+    public ICollection<Storage> Storages { get; set; }
 
     public Auditable Auditable { get; set; }
 

@@ -1,3 +1,8 @@
+using loja_api.Context;
+using Microsoft.EntityFrameworkCore;
+using SQLitePCL; // Adicione isso
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,7 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
+builder.Services.AddDbContext<ContextDB>(
+    o => o.UseSqlite(builder.Configuration.GetConnectionString("BdConnection"))
+);
+
+
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -1,8 +1,11 @@
-﻿namespace loja_api.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace loja_api.Entities;
 
 public class Cupom
 {
-    public int Id { get; set; } 
+    [Key]
+    public Guid CupomId { get; set; } 
 
     public string Name { get; set; }
 

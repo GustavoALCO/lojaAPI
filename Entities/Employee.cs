@@ -1,8 +1,10 @@
-﻿namespace loja_api.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace loja_api.Entities;
 
 public class Employee
 {
-
+    [Key]
     public int Id { get; set; } 
 
     public string FullName { get; set; }
@@ -11,7 +13,9 @@ public class Employee
 
     public string Password { get; set; }
 
-    public Boolean IsActive { get; set; }
+    public string position { get; set; }
 
-    Auditable Auditable { get; set; }
+    public bool IsActive { get; set; }
+
+    public Auditable Auditable { get; set; }
 }

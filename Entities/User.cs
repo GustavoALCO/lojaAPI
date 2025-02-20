@@ -1,7 +1,10 @@
-﻿namespace loja_api.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace loja_api.Entities;
 
 public class User
 {
+    [Key]
     public Guid IdUser { get; set; }
 
     public string Name { get; set; }    
@@ -16,5 +19,9 @@ public class User
 
     public string Email { get; set; }
 
-    public string password { get; set; }
+    public string Password { get; set; }
+
+    public bool EmailConfirmed { get; set; }
+
+    public  ICollection<MarketCart> MarketCart { get; set; }
 }

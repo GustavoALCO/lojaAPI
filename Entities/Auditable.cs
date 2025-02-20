@@ -1,5 +1,8 @@
-﻿namespace loja_api.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
+namespace loja_api.Entities;
+
+[NotMapped]
 public class Auditable
 {
     public Guid CreatebyId { get; set; }
