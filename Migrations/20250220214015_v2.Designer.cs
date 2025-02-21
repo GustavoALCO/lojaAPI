@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using loja_api.Context;
 
@@ -10,9 +11,11 @@ using loja_api.Context;
 namespace loja_api.Migrations
 {
     [DbContext(typeof(ContextDB))]
-    partial class ContextDBModelSnapshot : ModelSnapshot
+    [Migration("20250220214015_v2")]
+    partial class v2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
@@ -214,7 +217,7 @@ namespace loja_api.Migrations
 
             modelBuilder.Entity("loja_api.Entities.Cupom", b =>
                 {
-                    b.OwnsOne("loja_api.Entities.auxiliar.Auditable", "Auditable", b1 =>
+                    b.OwnsOne("loja_api.Entities.Auditable", "Auditable", b1 =>
                         {
                             b1.Property<Guid>("CupomId")
                                 .HasColumnType("TEXT");
@@ -222,14 +225,14 @@ namespace loja_api.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("TEXT");
 
-                            b1.Property<int>("CreatebyId")
-                                .HasColumnType("INTEGER");
+                            b1.Property<Guid>("CreatebyId")
+                                .HasColumnType("TEXT");
 
                             b1.Property<DateTime>("UpdateDate")
                                 .HasColumnType("TEXT");
 
-                            b1.Property<int>("UpdatebyId")
-                                .HasColumnType("INTEGER");
+                            b1.Property<Guid>("UpdatebyId")
+                                .HasColumnType("TEXT");
 
                             b1.HasKey("CupomId");
 
@@ -245,7 +248,7 @@ namespace loja_api.Migrations
 
             modelBuilder.Entity("loja_api.Entities.Employee", b =>
                 {
-                    b.OwnsOne("loja_api.Entities.auxiliar.Auditable", "Auditable", b1 =>
+                    b.OwnsOne("loja_api.Entities.Auditable", "Auditable", b1 =>
                         {
                             b1.Property<int>("EmployeeId")
                                 .HasColumnType("INTEGER");
@@ -253,14 +256,14 @@ namespace loja_api.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("TEXT");
 
-                            b1.Property<int>("CreatebyId")
-                                .HasColumnType("INTEGER");
+                            b1.Property<Guid>("CreatebyId")
+                                .HasColumnType("TEXT");
 
                             b1.Property<DateTime>("UpdateDate")
                                 .HasColumnType("TEXT");
 
-                            b1.Property<int>("UpdatebyId")
-                                .HasColumnType("INTEGER");
+                            b1.Property<Guid>("UpdatebyId")
+                                .HasColumnType("TEXT");
 
                             b1.HasKey("EmployeeId");
 
@@ -295,7 +298,7 @@ namespace loja_api.Migrations
 
             modelBuilder.Entity("loja_api.Entities.Products", b =>
                 {
-                    b.OwnsOne("loja_api.Entities.auxiliar.Auditable", "Auditable", b1 =>
+                    b.OwnsOne("loja_api.Entities.Auditable", "Auditable", b1 =>
                         {
                             b1.Property<Guid>("ProductsIdProducts")
                                 .HasColumnType("TEXT");
@@ -303,14 +306,14 @@ namespace loja_api.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("TEXT");
 
-                            b1.Property<int>("CreatebyId")
-                                .HasColumnType("INTEGER");
+                            b1.Property<Guid>("CreatebyId")
+                                .HasColumnType("TEXT");
 
                             b1.Property<DateTime>("UpdateDate")
                                 .HasColumnType("TEXT");
 
-                            b1.Property<int>("UpdatebyId")
-                                .HasColumnType("INTEGER");
+                            b1.Property<Guid>("UpdatebyId")
+                                .HasColumnType("TEXT");
 
                             b1.HasKey("ProductsIdProducts");
 
@@ -332,7 +335,7 @@ namespace loja_api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("loja_api.Entities.auxiliar.Auditable", "Auditable", b1 =>
+                    b.OwnsOne("loja_api.Entities.Auditable", "Auditable", b1 =>
                         {
                             b1.Property<Guid>("StorageIdStorage")
                                 .HasColumnType("TEXT");
@@ -340,14 +343,14 @@ namespace loja_api.Migrations
                             b1.Property<DateTime>("CreateDate")
                                 .HasColumnType("TEXT");
 
-                            b1.Property<int>("CreatebyId")
-                                .HasColumnType("INTEGER");
+                            b1.Property<Guid>("CreatebyId")
+                                .HasColumnType("TEXT");
 
                             b1.Property<DateTime>("UpdateDate")
                                 .HasColumnType("TEXT");
 
-                            b1.Property<int>("UpdatebyId")
-                                .HasColumnType("INTEGER");
+                            b1.Property<Guid>("UpdatebyId")
+                                .HasColumnType("TEXT");
 
                             b1.HasKey("StorageIdStorage");
 

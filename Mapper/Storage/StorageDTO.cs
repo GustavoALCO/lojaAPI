@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using loja_api.Entities.auxiliar;
+﻿using loja_api.Entities.auxiliar;
 
-namespace loja_api.Entities;
+namespace loja_api.Mapper.Storage;
 
-public class Storage
+public class StorageDTO
 {
-    [Key]
     public Guid IdStorage { get; set; }
 
     public Guid IdProducts { get; set; }
@@ -13,8 +11,6 @@ public class Storage
     public int Quantity { get; set; }
 
     public double PriceBuy { get; set; }
-
-    public Products Products { get; set; }
 
     public Auditable Auditable { get; set; }
 }

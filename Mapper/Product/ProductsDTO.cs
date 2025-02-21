@@ -1,11 +1,9 @@
 ﻿using loja_api.Entities.auxiliar;
-using System.ComponentModel.DataAnnotations;
 
-namespace loja_api.Entities;
+namespace loja_api.Mapper.Product;
 
-public class Products
+public class ProductsDTO
 {
-    [Key]
     public Guid IdProducts { get; set; }
 
     public string ProductName { get; set; }
@@ -18,12 +16,7 @@ public class Products
 
     public double Price { get; set; }
 
-    public int QuantityStorage {  get; set; }
-
-    public List<ProductsMarketCart> ProductsMarketCart { get; set; }
-
-    public ICollection<Storage> Storages { get; set; }
+    public int QuantityStorage { get; set; }
 
     public Auditable Auditable { get; set; }
-
 }

@@ -1,4 +1,5 @@
 ﻿using loja_api.Entities;
+using loja_api.Entities.auxiliar;
 using Microsoft.EntityFrameworkCore;
 
 namespace loja_api.Context;
@@ -40,10 +41,23 @@ public class ContextDB : DbContext
             .WithOne()
             .HasForeignKey<MarketCart>(m => m.CupomId);
 
-
         // Configuração de Products com Auditable
         modelBuilder.Entity<Products>()
             .OwnsOne(m => m.Auditable);
+
+        //Declarando classe intermediaria
+        modelBuilder.Entity<ProductsMarketCart>()
+        .HasKey(mp => new { mp.MarketCartId, mp.IdProducts });
+
+        modelBuilder.Entity<ProductsMarketCart>()
+            .HasOne(mp => mp.MarketCart)
+            .WithMany(m => m.ProductsMarketCart)
+            .HasForeignKey(mp => mp.MarketCartId);
+
+        modelBuilder.Entity<ProductsMarketCart>()
+            .HasOne(mp => mp.Products)
+            .WithMany(p => p.ProductsMarketCart)
+            .HasForeignKey(mp => mp.IdProducts);
 
         // Configuração de Storage e Products
         modelBuilder.Entity<Storage>()

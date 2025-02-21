@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using loja_api.Entities.auxiliar;
 
 namespace loja_api.Entities;
 
