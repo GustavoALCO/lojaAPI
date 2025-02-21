@@ -2,7 +2,10 @@
 
 public class CupomUpdateDTO
 {
+    public Guid CupomId { get; set; }
     public string Name { get; set; }
+
+    public int Discount { get; set; }
 
     public int Quantity { get; set; }
 

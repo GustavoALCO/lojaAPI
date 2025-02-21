@@ -1,6 +1,11 @@
+using FluentValidation;
 using loja_api.Context;
+using loja_api.EndpointsHandlers;
+using loja_api.Mapper.Cupom;
+using loja_api.Validators.Cupom;
 using Microsoft.EntityFrameworkCore;
-using SQLitePCL; // Adicione isso
+
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,10 +20,18 @@ builder.Services.AddDbContext<ContextDB>(
     o => o.UseSqlite(builder.Configuration.GetConnectionString("BdConnection"))
 );
 
+builder.Services.AddLogging();
+
+//necessario para o AutoMapper Funcionar
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+//Declarando as Validações no código principal 
+builder.Services.AddScoped<IValidator<CupomCreateDTO>, CreateCupomValidation>();
 
 var app = builder.Build();
 
-
+//Declarando Endpoints 
+app.RegisterCupomEndPoint();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

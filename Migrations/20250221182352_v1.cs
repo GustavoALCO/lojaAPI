@@ -17,11 +17,12 @@ namespace loja_api.Migrations
                 {
                     CupomId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                    Discount = table.Column<int>(type: "INTEGER", nullable: false),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
                     ExpirationDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Auditable_CreatebyId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Auditable_CreatebyId = table.Column<int>(type: "INTEGER", nullable: false),
                     Auditable_CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Auditable_UpdatebyId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Auditable_UpdatebyId = table.Column<int>(type: "INTEGER", nullable: false),
                     Auditable_UpdateDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -38,11 +39,11 @@ namespace loja_api.Migrations
                     FullName = table.Column<string>(type: "TEXT", nullable: false),
                     Login = table.Column<string>(type: "TEXT", nullable: false),
                     Password = table.Column<string>(type: "TEXT", nullable: false),
-                    position = table.Column<string>(type: "TEXT", nullable: false),
+                    Position = table.Column<string>(type: "TEXT", nullable: false),
                     IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Auditable_CreatebyId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Auditable_CreatebyId = table.Column<int>(type: "INTEGER", nullable: false),
                     Auditable_CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Auditable_UpdatebyId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Auditable_UpdatebyId = table.Column<int>(type: "INTEGER", nullable: false),
                     Auditable_UpdateDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -61,9 +62,9 @@ namespace loja_api.Migrations
                     TypeProduct = table.Column<string>(type: "TEXT", nullable: false),
                     Price = table.Column<double>(type: "REAL", nullable: false),
                     QuantityStorage = table.Column<int>(type: "INTEGER", nullable: false),
-                    Auditable_CreatebyId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Auditable_CreatebyId = table.Column<int>(type: "INTEGER", nullable: false),
                     Auditable_CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Auditable_UpdatebyId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Auditable_UpdatebyId = table.Column<int>(type: "INTEGER", nullable: false),
                     Auditable_UpdateDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -98,9 +99,9 @@ namespace loja_api.Migrations
                     IdProducts = table.Column<Guid>(type: "TEXT", nullable: false),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
                     PriceBuy = table.Column<double>(type: "REAL", nullable: false),
-                    Auditable_CreatebyId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Auditable_CreatebyId = table.Column<int>(type: "INTEGER", nullable: false),
                     Auditable_CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Auditable_UpdatebyId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Auditable_UpdatebyId = table.Column<int>(type: "INTEGER", nullable: false),
                     Auditable_UpdateDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -121,7 +122,6 @@ namespace loja_api.Migrations
                     MarketCartId = table.Column<Guid>(type: "TEXT", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     CupomId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    IdProducts = table.Column<string>(type: "TEXT", nullable: false),
                     Price = table.Column<double>(type: "REAL", nullable: false),
                     AttDate = table.Column<string>(type: "TEXT", nullable: false)
                 },
@@ -142,11 +142,42 @@ namespace loja_api.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ProductsMarketCart",
+                columns: table => new
+                {
+                    MarketCartId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    IdProducts = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                    Price = table.Column<double>(type: "REAL", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductsMarketCart", x => new { x.MarketCartId, x.IdProducts });
+                    table.ForeignKey(
+                        name: "FK_ProductsMarketCart_MarketCart_MarketCartId",
+                        column: x => x.MarketCartId,
+                        principalTable: "MarketCart",
+                        principalColumn: "MarketCartId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductsMarketCart_Products_IdProducts",
+                        column: x => x.IdProducts,
+                        principalTable: "Products",
+                        principalColumn: "IdProducts",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_MarketCart_CupomId",
                 table: "MarketCart",
                 column: "CupomId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductsMarketCart_IdProducts",
+                table: "ProductsMarketCart",
+                column: "IdProducts");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Storage_IdProducts",
@@ -161,19 +192,22 @@ namespace loja_api.Migrations
                 name: "Employee");
 
             migrationBuilder.DropTable(
-                name: "MarketCart");
+                name: "ProductsMarketCart");
 
             migrationBuilder.DropTable(
                 name: "Storage");
+
+            migrationBuilder.DropTable(
+                name: "MarketCart");
+
+            migrationBuilder.DropTable(
+                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "Cupom");
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Products");
         }
     }
 }

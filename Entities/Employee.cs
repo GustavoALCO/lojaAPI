@@ -14,7 +14,7 @@ public class Employee
 
     public string Password { get; set; }
 
-    public string position { get; set; }
+    public string Position { get; set; }
 
     public bool IsActive { get; set; }
 

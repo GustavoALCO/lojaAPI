@@ -7,7 +7,7 @@ namespace loja_api.Profiles;
 
 public class CupomProfille : Profile
 {
-    CupomProfille() 
+    public CupomProfille() 
     {
         CreateMap<Cupom, CupomDTO>().ReverseMap();
 
@@ -33,6 +33,7 @@ public class CupomProfille : Profile
                     {
                         UpdateDate = src.UpdateDate,
                         UpdatebyId = src.UpdatebyId,
-                    }));
+                    }))
+                    .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); ;
     }
 }

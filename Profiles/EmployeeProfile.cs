@@ -7,7 +7,7 @@ namespace loja_api.Profiles;
 
 public class EmployeeProfile : Profile
 {
-    EmployeeProfile()
+    public EmployeeProfile()
     {
         CreateMap<Employee, EmployeeDTO>().ReverseMap();
 

@@ -23,6 +23,9 @@ namespace loja_api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Discount")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("TEXT");
 
@@ -30,7 +33,7 @@ namespace loja_api.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("quantity")
+                    b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("CupomId");
@@ -59,7 +62,7 @@ namespace loja_api.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("position")
+                    b.Property<string>("Position")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
