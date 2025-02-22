@@ -12,5 +12,7 @@ public class StorageDTO
 
     public double PriceBuy { get; set; }
 
+    public bool IsValid { get; set; }
+
     public Auditable Auditable { get; set; }
 }

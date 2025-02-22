@@ -27,6 +27,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 //Declarando as Validações no código principal 
 builder.Services.AddScoped<IValidator<CupomCreateDTO>, CreateCupomValidation>();
+builder.Services.AddScoped<IValidator<CupomUpdateDTO>, UpdateCupomValidation>();
 
 var app = builder.Build();
 

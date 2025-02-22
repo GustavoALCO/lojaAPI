@@ -73,20 +73,37 @@ public class Cupomhandler
         return TypedResults.Ok("Cupom Criado Com Sucesso");
     }
 
-    public static async Task<Results<BadRequest, Ok>> UpdateCupom
+    public static async Task<Results<BadRequest<string>, Ok>> UpdateCupom
                                                       (IMapper mapper,
+                                                        IValidator<CupomUpdateDTO> validator,
+                                                        [FromServices] ILogger<UpdateCupomValidation> logger,
                                                         ContextDB DB,
                                                         [FromBody]
                                                         CupomUpdateDTO cupomUpdate
                                                         )
     {
+        var validation = validator.Validate(cupomUpdate);
+        if (!validation.IsValid)
+        {
+            var errors = validation.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+
+            //Detalhando os Erros no Log para uma analise futura 
+            logger.LogWarning("Falha na validação do Cupom: {Errors}", string.Join("; ", validation.Errors.Select(e => e.ErrorMessage)));
+
+            //Retorna error 400 e pede para o adm verificar o console para mais informações 
+            return TypedResults.BadRequest("Verifique o Console para uma Informação mais detalhada");
+        }
+
 
         //Busca No banco de dados o Cupom passado pelo Id 
         var cupom = await DB.Cupom.FirstOrDefaultAsync(c => c.CupomId == cupomUpdate.CupomId);
 
         //Verifica se teve algum retorno Valido
         if (cupom == null)
-            return TypedResults.BadRequest();
+            return TypedResults.BadRequest("Id Não Identificado");
+
+        //adicionan
+        cupomUpdate.UpdateDate = DateTime.Now;
 
         //Substitui os dados do Cupom antigo pelos passados por ultimo 
         mapper.Map(cupomUpdate,cupom);
@@ -103,6 +120,7 @@ public class Cupomhandler
                                                         Guid Id,
                                                         ContextDB Db)
     {
+
         var cupom = await Db.Cupom.FirstOrDefaultAsync(c => c.CupomId == Id);
 
         if (cupom == null)

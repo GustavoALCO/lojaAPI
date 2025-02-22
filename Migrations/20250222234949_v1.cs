@@ -99,6 +99,7 @@ namespace loja_api.Migrations
                     IdProducts = table.Column<Guid>(type: "TEXT", nullable: false),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
                     PriceBuy = table.Column<double>(type: "REAL", nullable: false),
+                    IsValid = table.Column<bool>(type: "INTEGER", nullable: false),
                     Auditable_CreatebyId = table.Column<int>(type: "INTEGER", nullable: false),
                     Auditable_CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Auditable_UpdatebyId = table.Column<int>(type: "INTEGER", nullable: false),

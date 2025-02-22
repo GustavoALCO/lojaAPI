@@ -13,5 +13,7 @@ public class StorageCreateDTO
 
     public int CreatebyId { get; set; }
 
+    public bool IsValid { get; set; }
+
     public DateTime CreateDate { get; set; }
 }

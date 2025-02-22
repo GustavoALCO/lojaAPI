@@ -11,7 +11,7 @@ using loja_api.Context;
 namespace loja_api.Migrations
 {
     [DbContext(typeof(ContextDB))]
-    [Migration("20250221182352_v1")]
+    [Migration("20250222234949_v1")]
     partial class v1
     {
         /// <inheritdoc />
@@ -141,6 +141,9 @@ namespace loja_api.Migrations
 
                     b.Property<Guid>("IdProducts")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsValid")
+                        .HasColumnType("INTEGER");
 
                     b.Property<double>("PriceBuy")
                         .HasColumnType("REAL");

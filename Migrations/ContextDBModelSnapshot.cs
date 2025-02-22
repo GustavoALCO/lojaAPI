@@ -139,6 +139,9 @@ namespace loja_api.Migrations
                     b.Property<Guid>("IdProducts")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsValid")
+                        .HasColumnType("INTEGER");
+
                     b.Property<double>("PriceBuy")
                         .HasColumnType("REAL");
 

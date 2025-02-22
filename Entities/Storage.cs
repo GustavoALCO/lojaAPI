@@ -14,6 +14,8 @@ public class Storage
 
     public double PriceBuy { get; set; }
 
+    public bool IsValid { get; set; }
+
     public Products Products { get; set; }
 
     public Auditable Auditable { get; set; }
