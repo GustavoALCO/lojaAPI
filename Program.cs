@@ -2,7 +2,9 @@ using FluentValidation;
 using loja_api.Context;
 using loja_api.EndpointsHandlers;
 using loja_api.Mapper.Cupom;
+using loja_api.Mapper.Storage;
 using loja_api.Validators.Cupom;
+using loja_api.Validators.Storage;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -28,11 +30,14 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 //Declarando as Validações no código principal 
 builder.Services.AddScoped<IValidator<CupomCreateDTO>, CreateCupomValidation>();
 builder.Services.AddScoped<IValidator<CupomUpdateDTO>, UpdateCupomValidation>();
+builder.Services.AddScoped<IValidator<StorageCreateDTO>, CreateStorageValidation>();
+builder.Services.AddScoped<IValidator<StorageUpdateDTO>, UpdateStorageValition>();
 
 var app = builder.Build();
 
 //Declarando Endpoints 
 app.RegisterCupomEndPoint();
+app.RegisterStorageEndPoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

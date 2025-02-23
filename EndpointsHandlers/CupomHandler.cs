@@ -61,10 +61,10 @@ public class Cupomhandler
         cupomCreate.CreateDate = DateTime.Now;
 
         //Converte o DTO para a Classe Cupom existente no banco de dados 
-        var moto = mapper.Map<Cupom>(cupomCreate);
+        var cupom = mapper.Map<Cupom>(cupomCreate);
 
         //Adiciona no banco de dados 
-        await DB.AddAsync( moto );
+        await DB.AddAsync( cupom );
 
         //Salva as alterações 
         await DB.SaveChangesAsync();

@@ -19,4 +19,27 @@ public static class EndPointRouteBuilder
 
         CupomEndPoint.MapDelete("/{Id}", Cupomhandler.DeleteCupom);
     }
+
+    public static void RegisterStorageEndPoints(this IEndpointRouteBuilder EndpointRoute)
+    {
+        var StorageEndPoints = EndpointRoute.MapGroup("/Storage");
+
+        StorageEndPoints.MapGet("", StorageHandlers.GetStorage)
+            .WithSummary("Busca Todos os Storages Se deixar nulo ou todos pelo ID do Produto");
+
+        StorageEndPoints.MapGet("{Id}", StorageHandlers.GetStorageId)
+            .WithSummary("Busca por um Storage especifico pelo ID");
+
+        StorageEndPoints.MapPost("", StorageHandlers.CreateStorage)
+            .WithSummary("Usado Para Criar um nova Storage");
+
+        StorageEndPoints.MapPut("", StorageHandlers.UpdateStorage).
+            WithSummary("Usado para Alterar as propriedades da Storage");
+
+        StorageEndPoints.MapPut("/{Isvalid}/{Id}", StorageHandlers.UpdateIsValid)
+            .WithSummary("Usado apenas para mudar o status do IsValid sendo passado um bool");
+
+        StorageEndPoints.MapDelete("{Id}", StorageHandlers.DeleteStorage)
+            .WithSummary("Usado para excluir a Storage do banco de dados");
+    }
 }
