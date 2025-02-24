@@ -3,133 +3,97 @@ using FluentValidation;
 using loja_api.Context;
 using loja_api.Entities;
 using loja_api.Mapper.Cupom;
+using loja_api.Services;
 using loja_api.Validators.Cupom;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace loja_api.EndpointsHandlers;
 
 public class Cupomhandler
 {
 
-    public static async Task<Results<NotFound,Ok<IEnumerable<CupomDTO>>>> GetCupons
-                                                                            (IMapper mapper,
-                                                                            ContextDB DB,
-                                                                            [FromQuery(Name = "Name")]
-                                                                            string? Name
-                                                                            )
+    public static async Task<Results<BadRequest<string>,Ok<IEnumerable<CupomDTO>>>> GetCupons
+                                                                            (CupomService cupomService,
+                                                                            [FromQuery]
+                                                                            string Name)
     {
-            //Fazendo Chamado no banco de dados com duas funções, 1º Se name for nulo ele busca todos os Cupons
-                                                                //2ºbusca todos os cupons que contem o valor passado na variavel
-           var Cupom = mapper.Map<IEnumerable<CupomDTO>>(await DB.Cupom.Where(c => Name == null ||
-                                                                              Name.ToUpper().Contains(c.Name.ToUpper()))
-                                                                              .ToListAsync());
-        
-            //Se a variavel Cupom tiver menos de 1 objeto dentro dela retorna um NotFound
-            if (!Cupom.Any())
-            {
-                return TypedResults.NotFound();
-            }
+        try
+        {
+            var cupom = await cupomService.GetCupom(Name);
 
-            return TypedResults.Ok(Cupom);
+            if (cupom == null)
+                return TypedResults.BadRequest("Não foi encontrado nenhum cupom");
+
+            return TypedResults.Ok(cupom);
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.Message.ToString());
+        }
     }
 
-    public static async Task<Results<BadRequest<string>, Ok<string>>> CreateCupom
-                                                      (IMapper mapper,
-                                                       ContextDB DB,
-                                                       IValidator<CupomCreateDTO> validator,
-                                                       [FromServices] ILogger<CreateCupomValidation> logger,
+    public static async Task<Results<BadRequest<string>, Ok<CupomDTO>>> CreateCupom
+                                                      (CupomService cupomService,
                                                        [FromBody] CupomCreateDTO cupomCreate
                                                         )
     {
-        //Validando as Principais variaveis para a criação de um cupom 
-        var validation = validator.Validate(cupomCreate);
-        if (!validation.IsValid) 
+        try
         {
-            var errors = validation.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+            var cupom = await cupomService.CreateCupom(cupomCreate);
 
-            //Detalhando os Erros no Log para uma analise futura 
-            logger.LogWarning("Falha na validação do Cupom: {Errors}", string.Join("; ", validation.Errors.Select(e => e.ErrorMessage)));
+            if (cupom == null)
+                return TypedResults.BadRequest("Não foi possivel Ceiar um novo cupom. Verifique o Log");
 
-            //Retorna error 400 e pede para o adm verificar o console para mais informações 
-            return TypedResults.BadRequest("Verifique o Console para uma Informação mais detalhada");
+            return TypedResults.Ok(cupom);
         }
-            
-
-        //Adicionando Data atual para o cupom sendo criado
-        cupomCreate.CreateDate = DateTime.Now;
-
-        //Converte o DTO para a Classe Cupom existente no banco de dados 
-        var cupom = mapper.Map<Cupom>(cupomCreate);
-
-        //Adiciona no banco de dados 
-        await DB.AddAsync( cupom );
-
-        //Salva as alterações 
-        await DB.SaveChangesAsync();
-
-        //retorna 200 com uma mensagem estatica de usuario criado 
-        return TypedResults.Ok("Cupom Criado Com Sucesso");
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.Message.ToString());
+        }
     }
 
-    public static async Task<Results<BadRequest<string>, Ok>> UpdateCupom
-                                                      (IMapper mapper,
-                                                        IValidator<CupomUpdateDTO> validator,
-                                                        [FromServices] ILogger<UpdateCupomValidation> logger,
-                                                        ContextDB DB,
+    public static async Task<Results<BadRequest<string>, Ok<CupomDTO>>> UpdateCupom
+                                                      (CupomService cupomService,
                                                         [FromBody]
                                                         CupomUpdateDTO cupomUpdate
                                                         )
     {
-        var validation = validator.Validate(cupomUpdate);
-        if (!validation.IsValid)
+        try
         {
-            var errors = validation.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+            var cupom = await cupomService.UpdateCupom(cupomUpdate);
 
-            //Detalhando os Erros no Log para uma analise futura 
-            logger.LogWarning("Falha na validação do Cupom: {Errors}", string.Join("; ", validation.Errors.Select(e => e.ErrorMessage)));
+            if (cupom == null)
+                return TypedResults.BadRequest("Não foi possivel Ceiar um novo cupom. Verifique o Log");
 
-            //Retorna error 400 e pede para o adm verificar o console para mais informações 
-            return TypedResults.BadRequest("Verifique o Console para uma Informação mais detalhada");
+            return TypedResults.Ok(cupom);
         }
-
-
-        //Busca No banco de dados o Cupom passado pelo Id 
-        var cupom = await DB.Cupom.FirstOrDefaultAsync(c => c.CupomId == cupomUpdate.CupomId);
-
-        //Verifica se teve algum retorno Valido
-        if (cupom == null)
-            return TypedResults.BadRequest("Id Não Identificado");
-
-        //adicionan
-        cupomUpdate.UpdateDate = DateTime.Now;
-
-        //Substitui os dados do Cupom antigo pelos passados por ultimo 
-        mapper.Map(cupomUpdate,cupom);
-
-        //Salva no banco de dados 
-        await DB.SaveChangesAsync();
-
-        //Retorna com um Status 200
-        return TypedResults.Ok();
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.Message.ToString());
+        }
     }
 
 
-    public static async Task<Results<Ok, BadRequest>> DeleteCupom(
+    public static async Task<Results<Ok<string>, BadRequest<string>>> DeleteCupom(
                                                         Guid Id,
-                                                        ContextDB Db)
+                                                        CupomService cupomService)
     {
+        try
+        {
+            var cupom = await cupomService.DeleteCupom(Id);
 
-        var cupom = await Db.Cupom.FirstOrDefaultAsync(c => c.CupomId == Id);
+            if (cupom == null)
+                return TypedResults.BadRequest("Não foi possivel Ceiar um novo cupom. Verifique o Log");
 
-        if (cupom == null)
-            return TypedResults.BadRequest();
+            return TypedResults.Ok(cupom);
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.Message.ToString());
+        }
 
-        Db.Remove(cupom);
-
-        Db.SaveChanges();
-
-        return TypedResults.Ok();
     }
 }

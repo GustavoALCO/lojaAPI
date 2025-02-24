@@ -1,150 +1,135 @@
-﻿using AutoMapper;
-using FluentValidation;
-using loja_api.Context;
-using loja_api.Entities;
-using loja_api.Mapper.Storage;
-using loja_api.Validators.Storage;
+﻿using loja_api.Mapper.Storage;
+using loja_api.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
 namespace loja_api.EndpointsHandlers;
 
 public static class StorageHandlers
 {
 
-    public static async Task<Results<NotFound,Ok<IEnumerable<StorageDTO>>>> GetStorage
-                                                                            (ContextDB Db,
-                                                                             IMapper mapper,
+    public static async Task<Results<BadRequest<string>,Ok<IEnumerable<StorageDTO>>>> GetStorage
+                                                                            (StorageServices storageServices,
                                                                              Guid? ID)
     {
-         var Storage = mapper.Map<IEnumerable<StorageDTO>>(await  Db.Storage.Where(s => ID == null || s.IdProducts == ID).ToListAsync());
+        try
+        {
+            var storage = await storageServices.GetStorage(ID);
 
-        if(!Storage.Any())
-            return TypedResults.NotFound();
+            if (storage == null)
+                return TypedResults.BadRequest("O Banco de Dados da Storage esta Vazio");
 
-        return TypedResults.Ok(Storage);
+            return TypedResults.Ok(storage);
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.ToString());
+        }
     }
 
-    public static async Task<Results<Ok<StorageDTO>, NotFound>> GetStorageId
-                                                        (ContextDB DB,
-                                                        IMapper mapper,
+    public static async Task<Results<Ok<StorageDTO>, BadRequest<string>>> GetStorageId
+                                                        (StorageServices storageServices,
                                                         Guid id 
                                                         )
     {
+        try
+        {
+            var storage = await storageServices.GetStorageID(id);
 
-        var Storage = mapper.Map<StorageDTO>( await DB.Storage.FirstOrDefaultAsync(s => s.IdStorage.Equals(id)));  
+            if (storage == null)
+                return TypedResults.BadRequest("Visualize o Console para mais Informações");
 
-        if(Storage == null)
-            return TypedResults.NotFound();
+            return TypedResults.Ok(storage);
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.ToString());
+        }
 
-        return TypedResults.Ok(Storage);
     }
 
-    public static async Task<Results<Ok<string>,BadRequest<string>>> CreateStorage
-                                                            (ContextDB DB,
-                                                             IMapper mapper,
-                                                             IValidator<StorageCreateDTO> validator,
-                                                             [FromServices] ILogger<CreateStorageValidation> logger,
+    public static async Task<Results<Ok<StorageDTO>,BadRequest<string>>> CreateStorage
+                                                            (StorageServices storageServices,
                                                              [FromBody]
                                                              StorageCreateDTO createDTO)
     {
-
-        var validation = validator.Validate(createDTO);
-        if(!validation.IsValid)
+        try
         {
-            var errors = validation.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+            var storage = await storageServices.CreateStorage(createDTO);
 
-            //Detalhando os Erros no Log para uma analise futura 
-            logger.LogWarning("Falha na validação do Cupom: {Errors}", string.Join("; ", validation.Errors.Select(e => e.ErrorMessage)));
+            if (storage == null)
+                return TypedResults.BadRequest("Visualize o Console para mais Informações");
 
-            //Retorna error 400 e pede para o adm verificar o console para mais informações 
-            return TypedResults.BadRequest("Verifique o Console para uma Informação mais detalhada");
+            return TypedResults.Ok(storage);
         }
-
-        //Adicionando Data atual para o cupom sendo criado
-        createDTO.CreateDate = DateTime.Now;
-        //Mapeia o CreateDTO para Storage
-        var storage = mapper.Map<Storage>(createDTO);
-        //Adiciona ao Banco de dados 
-        await DB.AddAsync(storage);
-        //Salva no banco de dados 
-        await DB.SaveChangesAsync();
-        //Retorna Status 200 Com uma mensagem de Storage Criado 
-        return TypedResults.Ok("Storage Criado Com Sucesso");
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.ToString());
+        }
     }
 
-    public static async Task<Results<Ok<string>, BadRequest<string>>> UpdateStorage(
-                                                                       IMapper mapper,
-                                                                       IValidator<StorageUpdateDTO> validator,
-                                                                       ILogger<UpdateStorageValition> logger,
-                                                                       ContextDB DB,
+    public static async Task<Results<Ok<StorageDTO>, BadRequest<string>>> UpdateStorage(
+                                                                       StorageServices storageServices,
                                                                        [FromBody]
                                                                        StorageUpdateDTO UpdateDTO)
     {
-
-        var validation = validator.Validate(UpdateDTO);
-
-        if (!validation.IsValid)
+        try
         {
-            var errors = validation.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+           var storage = await storageServices.UpdateStorage(UpdateDTO);
 
-            //Detalhando os Erros no Log para uma analise futura 
-            logger.LogWarning("Falha na validação do Cupom: {Errors}", string.Join("; ", validation.Errors.Select(e => e.ErrorMessage)));
+            if(storage == null)
+                return TypedResults.BadRequest("Visualize o Console para mais Informações");
 
-            //Retorna error 400 e pede para o adm verificar o console para mais informações 
-            return TypedResults.BadRequest("Verifique o Console para uma Informação mais detalhada");
+           return TypedResults.Ok(storage);
         }
-
-        var store = await DB.Storage.FirstOrDefaultAsync(s => s.IdStorage == UpdateDTO.IdStorage);
-
-        if (store == null)
-            return TypedResults.BadRequest("Erro ao Encontrar ID");
-
-        mapper.Map(UpdateDTO, store);
-
-        await DB.SaveChangesAsync();
-
-        return TypedResults.Ok("Store Atualizado Com Sucesso");
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.ToString());
+        }
+       
     }
 
-    public static async Task<Results<Ok,BadRequest>> UpdateIsValid
-                                           (ContextDB DB,
+    public static async Task<Results<Ok<StorageDTO>,BadRequest<string>>> UpdateIsValid
+                                           (StorageServices storageServices,
                                             [FromQuery]
                                             bool isvalid,
                                             [FromQuery]
                                             Guid Id
                                             )
     {
-        var storage = await DB.Storage.FirstOrDefaultAsync(s => s.IdStorage == Id);
 
-        if(storage == null)
-            return TypedResults.BadRequest();
+        try
+        {
+            var storage = await storageServices.UpdateIsValid(Id, isvalid);
 
-        storage.IsValid = isvalid;
+            if (storage == null)
+                return TypedResults.BadRequest("Visualize o Console para mais Informações");
 
-        DB.Update(storage);
-
-        await DB.SaveChangesAsync();
-
-        return TypedResults.Ok();
-
+            return TypedResults.Ok(storage);
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.ToString());
+        } 
+            
     }
 
-    public static async Task<Results<Ok, BadRequest>> DeleteStorage
-                                                        (ContextDB DB,
+    public static async Task<Results<Ok, BadRequest<string>>> DeleteStorage
+                                                        (StorageServices storageServices,
                                                          Guid ID
                                                         )
     {
-        var Storage = DB.Storage.FirstOrDefault( s => s.IdStorage == ID);
+        try
+        {
+            var storage = await storageServices.DeleteStorage(ID);
 
-        if(Storage == null)
-            return TypedResults.BadRequest();
+            if (storage == null)
+                return TypedResults.Ok();
 
-        DB.Remove(Storage);
-
-        await DB.SaveChangesAsync();
-
-        return TypedResults.Ok();
+            return TypedResults.BadRequest(storage);
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.ToString());
+        }
     }
 }

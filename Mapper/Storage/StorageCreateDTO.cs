@@ -5,6 +5,7 @@ namespace loja_api.Mapper.Storage;
 public class StorageCreateDTO
 {
 
+    public Guid IdStorage { get; set; }
     public Guid IdProducts { get; set; }
 
     public int Quantity { get; set; }

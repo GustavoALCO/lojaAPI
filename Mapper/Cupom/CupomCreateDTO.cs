@@ -2,6 +2,8 @@
 
 public class CupomCreateDTO
 {
+    public Guid CupomId { get; set; }
+
     public string Name { get; set; }
 
     public int Discount { get; set; }
