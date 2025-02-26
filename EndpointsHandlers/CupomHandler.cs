@@ -1,14 +1,8 @@
-﻿using AutoMapper;
-using FluentValidation;
-using loja_api.Context;
-using loja_api.Entities;
-using loja_api.Mapper.Cupom;
+﻿using loja_api.Mapper.Cupom;
 using loja_api.Services;
-using loja_api.Validators.Cupom;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
+
 
 namespace loja_api.EndpointsHandlers;
 
@@ -16,7 +10,7 @@ public class Cupomhandler
 {
 
     public static async Task<Results<BadRequest<string>,Ok<IEnumerable<CupomDTO>>>> GetCupons
-                                                                            (CupomService cupomService,
+                                                                            ([FromServices] CupomService cupomService,
                                                                             [FromQuery]
                                                                             string Name)
     {
@@ -36,7 +30,7 @@ public class Cupomhandler
     }
 
     public static async Task<Results<BadRequest<string>, Ok<CupomDTO>>> CreateCupom
-                                                      (CupomService cupomService,
+                                                      ([FromServices]CupomService cupomService,
                                                        [FromBody] CupomCreateDTO cupomCreate
                                                         )
     {
@@ -56,7 +50,7 @@ public class Cupomhandler
     }
 
     public static async Task<Results<BadRequest<string>, Ok<CupomDTO>>> UpdateCupom
-                                                      (CupomService cupomService,
+                                                      ([FromServices] CupomService cupomService,
                                                         [FromBody]
                                                         CupomUpdateDTO cupomUpdate
                                                         )
@@ -77,9 +71,9 @@ public class Cupomhandler
     }
 
 
-    public static async Task<Results<Ok<string>, BadRequest<string>>> DeleteCupom(
-                                                        Guid Id,
-                                                        CupomService cupomService)
+    public static async Task<Results<Ok<string>, BadRequest<string>>> DeleteCupom([FromServices] CupomService cupomService,
+                                                        [FromQuery]Guid Id
+                                                        )
     {
         try
         {

@@ -21,4 +21,6 @@ public class UserDTO
 
     public bool EmailConfirmed { get; set; }
 
+    public bool IsValid { get; set; }
+
 }

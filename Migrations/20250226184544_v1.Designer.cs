@@ -11,7 +11,7 @@ using loja_api.Context;
 namespace loja_api.Migrations
 {
     [DbContext(typeof(ContextDB))]
-    [Migration("20250222234949_v1")]
+    [Migration("20250226184544_v1")]
     partial class v1
     {
         /// <inheritdoc />
@@ -177,6 +177,9 @@ namespace loja_api.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsValid")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")

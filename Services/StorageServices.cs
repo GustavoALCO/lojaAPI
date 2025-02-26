@@ -20,7 +20,7 @@ public class StorageServices
     private readonly IValidator<StorageCreateDTO> _validatorCreated;
 
     private readonly IValidator<StorageUpdateDTO> _validatorUpdate;
-    public StorageServices(ContextDB DB, IMapper mapper, ILogger logger, IValidator<StorageCreateDTO> validatorCreated, IValidator<StorageUpdateDTO> validatorUpdate)
+    public StorageServices(ContextDB DB, IMapper mapper, ILogger<StorageServices> logger, IValidator<StorageCreateDTO> validatorCreated, IValidator<StorageUpdateDTO> validatorUpdate)
     {
         _DB = DB;
         _mapper = mapper;
@@ -92,15 +92,15 @@ public class StorageServices
             return null;
         }
 
-        var store = _DB.Storage.FirstOrDefaultAsync(s => s.IdStorage == UpdateDTO.IdStorage);
+        var store = await _DB.Storage.FirstOrDefaultAsync(s => s.IdStorage == UpdateDTO.IdStorage);
 
         if (store == null)
             return null;
 
-        await _mapper.Map(UpdateDTO, store);
+        _mapper.Map(UpdateDTO, store);
         await _DB.SaveChangesAsync();
 
-        var valueReturn = await GetStorageID(UpdateDTO.IdStorage);
+        var valueReturn = _mapper.Map<StorageDTO>(store);
 
         return valueReturn;
     }

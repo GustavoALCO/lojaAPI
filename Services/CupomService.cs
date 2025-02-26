@@ -3,11 +3,7 @@ using FluentValidation;
 using loja_api.Context;
 using loja_api.Entities;
 using loja_api.Mapper.Cupom;
-using loja_api.Mapper.Storage;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
 namespace loja_api.Services;
 
@@ -23,7 +19,7 @@ public class CupomService
     private readonly IValidator<CupomCreateDTO> _validatorCreated;
 
     private readonly IValidator<CupomUpdateDTO> _validatorUpdate;
-    public CupomService(ContextDB DB, IMapper mapper, ILogger logger, IValidator<CupomCreateDTO> validatorCreated, IValidator<CupomUpdateDTO> validatorUpdate)
+    public CupomService(ContextDB DB, IMapper mapper, ILogger<CupomService> logger, IValidator<CupomCreateDTO> validatorCreated, IValidator<CupomUpdateDTO> validatorUpdate)
     {
         _DB = DB;
         _mapper = mapper;
@@ -89,7 +85,7 @@ public class CupomService
         //Salva as alterações 
         await _DB.SaveChangesAsync();
 
-        var valuereturn = await GetCupomId(cupomCreate.CupomId);
+        var valuereturn = _mapper.Map<CupomDTO>(cupom);
 
         return valuereturn;
     }
@@ -125,12 +121,12 @@ public class CupomService
         //Salva no banco de dados 
         await _DB.SaveChangesAsync();
 
-        var valueReturn = await GetCupomId(cupomUpdate.CupomId);
+        var valuereturn = _mapper.Map<CupomDTO>(cupom);
 
-        return valueReturn;
+        return valuereturn;
     }
 
-    public async Task<string> DeleteCupom(Guid Id)
+    public async Task<string?> DeleteCupom(Guid Id)
     {
         var cupom = await _DB.Cupom.FirstOrDefaultAsync(c => c.CupomId == Id);
 
@@ -141,6 +137,6 @@ public class CupomService
 
         _DB.SaveChanges();
 
-        return "Cupom Excluido COm Sucesso";
+        return "Cupom Excluido Com Sucesso";
     }
 }

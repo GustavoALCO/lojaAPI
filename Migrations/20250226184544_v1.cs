@@ -84,7 +84,8 @@ namespace loja_api.Migrations
                     PhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     Password = table.Column<string>(type: "TEXT", nullable: false),
-                    EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false)
+                    EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsValid = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -23,5 +23,7 @@ public class User
 
     public bool EmailConfirmed { get; set; }
 
+    public bool IsValid { get; set; }
+
     public  ICollection<MarketCart> MarketCart { get; set; }
 }

@@ -5,6 +5,8 @@ namespace loja_api.Mapper.User;
 
 public class UserUpdateDTO
 {
+    public Guid IdUser { get; set; }
+
     public string Name { get; set; }
 
     public string Surname { get; set; }
@@ -13,9 +15,7 @@ public class UserUpdateDTO
 
     public string PhoneNumber { get; set; }
 
-    public string Email { get; set; }
-
-    public string Password { get; set; }
-
     public bool EmailConfirmed { get; set; }
+
+    public bool IsValid { get; set; }
 }

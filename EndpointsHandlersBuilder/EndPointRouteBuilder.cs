@@ -1,4 +1,5 @@
-﻿
+﻿using Microsoft.AspNetCore.Builder;
+
 namespace loja_api.EndpointsHandlers;
 
 public static class EndPointRouteBuilder
@@ -41,5 +42,36 @@ public static class EndPointRouteBuilder
 
         StorageEndPoints.MapDelete("{Id}", StorageHandlers.DeleteStorage)
             .WithSummary("Usado para excluir a Storage do banco de dados");
+    }
+
+    public static void RegisterUserEndPoints(this IEndpointRouteBuilder EndPointRoute)
+    {
+        var userEndPoints = EndPointRoute.MapGroup("/User");
+
+        userEndPoints.MapGet("", Userhandler.GetUsers)
+            .WithSummary("Busca Todos os Usuarios Se deixar nulo ou todos pelo email do Produto");
+
+        userEndPoints.MapGet("{Id}", Userhandler.GetUsers)
+            .WithSummary("Busca usuarios pelo ID");
+
+        userEndPoints.MapPost("", Userhandler.CreateUser)
+            .WithSummary("Usado Para Criar um nova Storage");
+
+        userEndPoints.MapPut("", Userhandler.UpdateUser).
+            WithSummary("Usado para Alterar as propriedades da Storage");
+
+        userEndPoints.MapDelete("{Id}", Userhandler.DeleteUser)
+            .WithSummary("Usado para excluir a Storage do banco de dados");
+    }
+
+    public static void RegisterLoginEndPoints(this IEndpointRouteBuilder EndPointRoute)
+    {
+        var loginEndPoints = EndPointRoute.MapGroup("/Login");
+
+        loginEndPoints.MapPost("", Userhandler.Login)
+            .WithSummary("Usado Para Criar um nova Storage");
+
+        loginEndPoints.MapPut("", Userhandler.UpdateLogin).
+            WithSummary("Usado para Alterar as propriedades da Storage");
     }
 }
