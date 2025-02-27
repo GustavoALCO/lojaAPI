@@ -121,7 +121,7 @@ public class CupomService
         //Salva no banco de dados 
         await _DB.SaveChangesAsync();
 
-        var valuereturn = _mapper.Map<CupomDTO>(cupom);
+        var valuereturn = await GetCupomId(cupom.CupomId);
 
         return valuereturn;
     }

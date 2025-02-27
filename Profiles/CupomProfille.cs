@@ -2,6 +2,7 @@
 using loja_api.Entities.auxiliar;
 using loja_api.Entities;
 using loja_api.Mapper.Cupom;
+using loja_api.Mapper.Emploree;
 
 namespace loja_api.Profiles;
 
@@ -34,6 +35,6 @@ public class CupomProfille : Profile
                         UpdateDate = src.UpdateDate,
                         UpdatebyId = src.UpdatebyId,
                     }))
-                    .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); ;
+                    .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
     }
 }

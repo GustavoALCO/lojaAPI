@@ -179,7 +179,7 @@ public class UserServices
         {
             var User = await _DB.Users.FirstOrDefaultAsync(c => c.Email == loginDTO.Email);
 
-            var password = _hashService.ValidateUser(User, loginDTO.Password);
+            var password = _hashService.ValidatePassword(User, loginDTO.Password);
 
             if (User == null || password == false)
                 return false;

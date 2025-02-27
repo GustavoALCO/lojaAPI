@@ -33,6 +33,8 @@ public class ProductsProfile : Profile
                     {
                         UpdateDate = src.UpdateDate,
                         UpdatebyId = src.UpdatebyId,
-                    }));
+                    })).ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); 
+
+
     }
 }

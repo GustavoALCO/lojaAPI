@@ -64,14 +64,40 @@ public static class EndPointRouteBuilder
             .WithSummary("Usado para excluir a Storage do banco de dados");
     }
 
+    public static void RegisterEmployeeEndPoints(this IEndpointRouteBuilder EndPointRoute)
+    {
+        var userEndPoints = EndPointRoute.MapGroup("/User");
+
+        userEndPoints.MapGet("", EmployeeHandlers.GetEmployees)
+            .WithSummary("Busca Todos os Usuarios Se deixar nulo ou todos pelo email do Produto");
+
+        userEndPoints.MapGet("{Id}", EmployeeHandlers.GetEmployeeId)
+            .WithSummary("Busca usuarios pelo ID");
+
+        userEndPoints.MapPost("", EmployeeHandlers.CreateEmployee)
+            .WithSummary("Usado Para Criar um nova Storage");
+
+        userEndPoints.MapPut("", EmployeeHandlers.UpdateEmployee).
+            WithSummary("Usado para Alterar as propriedades da Storage");
+
+        userEndPoints.MapDelete("{Id}", EmployeeHandlers.DeleteEmployee)
+            .WithSummary("Usado para excluir a Storage do banco de dados");
+    }
+
     public static void RegisterLoginEndPoints(this IEndpointRouteBuilder EndPointRoute)
     {
         var loginEndPoints = EndPointRoute.MapGroup("/Login");
 
-        loginEndPoints.MapPost("", Userhandler.Login)
+        loginEndPoints.MapPost("/User", Userhandler.Login)
             .WithSummary("Usado Para Criar um nova Storage");
 
-        loginEndPoints.MapPut("", Userhandler.UpdateLogin).
+        loginEndPoints.MapPut("/User", Userhandler.UpdateLogin).
             WithSummary("Usado para Alterar as propriedades da Storage");
+
+        loginEndPoints.MapPost("/Employee", EmployeeHandlers.Login)
+            .WithSummary("Login Apenas para Usuarios");
+
+        loginEndPoints.MapPut("/Employee", EmployeeHandlers.UpdateLogin)
+            .WithSummary("Para o Usuario Alterar o Login ou senha");
     }
 }

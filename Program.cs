@@ -2,10 +2,12 @@ using FluentValidation;
 using loja_api.Context;
 using loja_api.EndpointsHandlers;
 using loja_api.Mapper.Cupom;
+using loja_api.Mapper.Emploree;
 using loja_api.Mapper.Storage;
 using loja_api.Mapper.User;
 using loja_api.Services;
 using loja_api.Validators.Cupom;
+using loja_api.Validators.Employee;
 using loja_api.Validators.Storage;
 using loja_api.Validators.User;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +39,8 @@ builder.Services.AddScoped<IValidator<StorageCreateDTO>, CreateStorageValidation
 builder.Services.AddScoped<IValidator<StorageUpdateDTO>, UpdateStorageValition>();
 builder.Services.AddScoped<IValidator<CreateUserDTO>, CreateUserValidation>();
 builder.Services.AddScoped<IValidator<UserUpdateDTO>, UpdateUserValidation>();
+builder.Services.AddScoped<IValidator<EmployeeCreateDTO>, CreateEmployeeValidation>();
+builder.Services.AddScoped<IValidator<EmployeeUpdateDTO>, UpdateEmployeeValidation>();
 
 builder.Services.AddScoped<CupomService>();
 builder.Services.AddScoped<HashService>();

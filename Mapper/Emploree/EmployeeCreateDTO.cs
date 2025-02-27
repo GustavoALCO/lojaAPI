@@ -4,6 +4,7 @@ namespace loja_api.Mapper.Emploree;
 
 public class EmployeeCreateDTO
 {
+    public int Id { get; set; }
 
     public string FullName { get; set; }
 
