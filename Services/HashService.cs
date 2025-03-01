@@ -23,6 +23,13 @@ public class HashService
         // Armazene o usuário no banco de dados (o armazenamento real deve ser feito em um repositório ou serviço de dados)
     }
 
+    public bool ValidatePasswordEmployee(Employee employee, string password)
+    {
+        // Verifica a senha fornecida
+        var result = _passwordHasherEmployee.VerifyHashedPassword(employee, employee.Password, password);
+        return result == PasswordVerificationResult.Success;
+    }
+
     public bool ValidatePassword(User user, string password)
     {
         // Verifica a senha fornecida

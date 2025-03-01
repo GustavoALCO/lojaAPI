@@ -75,9 +75,11 @@ public class EmployeeService
             _logger.LogWarning("Falha na Validação, Login já esta sendo usado");
             return null;
         }
-            
 
+        
         var employee = _mapper.Map<Employee>(createDTO);
+
+        _hashService.CreateHashEmployee(employee,createDTO.Password);
 
         await _DB.Employee.AddAsync(employee);
 
@@ -129,12 +131,24 @@ public class EmployeeService
     {
         try
         {
-            var Employee = await _DB.Users.FirstOrDefaultAsync(c => c.Email == loginrequest.Login);
+            var Employee = await _DB.Employee.FirstOrDefaultAsync(c => c.Login == loginrequest.Login);
 
-            var password = _hashService.ValidatePassword(Employee, loginrequest.Password);
+            
 
-            if (Employee == null || password == false)
+            if (Employee == null)
+            {
+                _logger.LogWarning("Não foi Possivel Encontrar um Login Valido");
                 return false;
+            }
+
+            var password = _hashService.ValidatePasswordEmployee(Employee, loginrequest.Password);
+
+            if (password == false)
+            {
+                _logger.LogWarning("Senha Incorreta");
+                return false;
+            }
+            
 
             return true;
         }
@@ -142,39 +156,6 @@ public class EmployeeService
         {
             _logger.LogWarning($"Erro no EmployeeService: {ex.ToString()}");
             return false;
-        }
-    }
-
-    public async Task<EmployeeDTO?> UpdateLogin(EmployeeLoginDTO loginDTO)
-    {
-
-        try
-        {
-            var User = await _DB.Employee.FirstOrDefaultAsync(c => c.Login == loginDTO.Login);
-
-            if (User == null)
-            {
-                _logger.LogWarning("Usuário com e-mail {Email} não encontrado.", loginDTO.Login);
-                return null;
-            }
-
-            if (loginDTO.Password != null)
-            {
-                _hashService.CreateHashEmployee(User, loginDTO.Password);
-            }
-
-            _mapper.Map(loginDTO, User);
-            //Salva no banco de dados o Usuario Criado
-            await _DB.SaveChangesAsync();
-            //mapeia o usuario Criado Em um DTO para esconder variaveis importantes
-            var returnUser = _mapper.Map<EmployeeDTO>( await GetEmployee(loginDTO.Login));
-
-            return returnUser;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogWarning($"Erro no UserService: {ex.ToString()}");
-            return null;
         }
     }
 }

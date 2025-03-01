@@ -33,9 +33,9 @@ public class EmployeeProfile : Profile
                     {
                         UpdateDate = src.UpdateDate,
                         UpdatebyId = src.UpdatebyId,
-                    })).ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); ;
+                    })).ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
 
-        CreateMap<Employee, EmployeeLoginDTO>().ReverseMap();
+        CreateMap<Employee, EmployeeLoginDTO>().ReverseMap().ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
 
     }
 }

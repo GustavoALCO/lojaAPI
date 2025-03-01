@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-
-namespace loja_api.EndpointsHandlers;
+﻿namespace loja_api.EndpointsHandlers;
 
 public static class EndPointRouteBuilder
 {
@@ -66,7 +64,7 @@ public static class EndPointRouteBuilder
 
     public static void RegisterEmployeeEndPoints(this IEndpointRouteBuilder EndPointRoute)
     {
-        var userEndPoints = EndPointRoute.MapGroup("/User");
+        var userEndPoints = EndPointRoute.MapGroup("/Employee");
 
         userEndPoints.MapGet("", EmployeeHandlers.GetEmployees)
             .WithSummary("Busca Todos os Usuarios Se deixar nulo ou todos pelo email do Produto");
@@ -91,13 +89,7 @@ public static class EndPointRouteBuilder
         loginEndPoints.MapPost("/User", Userhandler.Login)
             .WithSummary("Usado Para Criar um nova Storage");
 
-        loginEndPoints.MapPut("/User", Userhandler.UpdateLogin).
-            WithSummary("Usado para Alterar as propriedades da Storage");
-
         loginEndPoints.MapPost("/Employee", EmployeeHandlers.Login)
             .WithSummary("Login Apenas para Usuarios");
-
-        loginEndPoints.MapPut("/Employee", EmployeeHandlers.UpdateLogin)
-            .WithSummary("Para o Usuario Alterar o Login ou senha");
     }
 }

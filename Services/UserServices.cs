@@ -23,7 +23,9 @@ public class UserServices
     private readonly IValidator<UserUpdateDTO> _validatorUpdate;
 
     private readonly HashService _hashService;
-    public UserServices(ContextDB DB, IMapper mapper, ILogger<UserServices> logger, IValidator<CreateUserDTO> validatorCreated, IValidator<UserUpdateDTO> validatorUpdate, HashService hashService)
+
+    private readonly GenerateToken _generateToken;
+    public UserServices(ContextDB DB, IMapper mapper, ILogger<UserServices> logger, IValidator<CreateUserDTO> validatorCreated, IValidator<UserUpdateDTO> validatorUpdate, HashService hashService, GenerateToken generateToken)
     {
         _DB = DB;
         _mapper = mapper;
@@ -31,6 +33,7 @@ public class UserServices
         _validatorCreated = validatorCreated;
         _validatorUpdate = validatorUpdate;
         _hashService = hashService;
+        _generateToken = generateToken;
     }
 
     public async Task<IEnumerable<UserDTO>?> GetUser(string login)
@@ -140,56 +143,26 @@ public class UserServices
         
     }
 
-    public async Task<UserDTO?> UpdateLogin(UserLoginDTO loginDTO)
+    public async Task<string>Login(UserLoginDTO loginDTO)
     {
-        
         try
         {
             var User = await _DB.Users.FirstOrDefaultAsync(c => c.Email == loginDTO.Email);
 
             if (User == null)
-            {
-                _logger.LogWarning("Usuário com e-mail {Email} não encontrado.", loginDTO.Email);
-                return null;
-            }
-
-            if (loginDTO.Password != null)
-            {
-                _hashService.CreateHash(User, loginDTO.Password);
-            }
-
-            _mapper.Map(loginDTO, User);
-            //Salva no banco de dados o Usuario Criado
-            await _DB.SaveChangesAsync();
-            //mapeia o usuario Criado Em um DTO para esconder variaveis importantes
-            var returnUser = _mapper.Map<UserDTO>(User);
-
-            return returnUser;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogWarning($"Erro no UserService: {ex.ToString()}");
-            return null;
-        }
-    }
-
-    public async Task<bool>Login(UserLoginDTO loginDTO)
-    {
-        try
-        {
-            var User = await _DB.Users.FirstOrDefaultAsync(c => c.Email == loginDTO.Email);
+                return "";
 
             var password = _hashService.ValidatePassword(User, loginDTO.Password);
 
-            if (User == null || password == false)
-                return false;
+            if (password == false)
+                return "";
 
-            return true;
+            return _generateToken.GerarTokenLogin(User.Email);
         }
         catch (Exception ex)
         {
             _logger.LogWarning($"Erro no UserService: {ex.ToString()}");
-            return false;
+            return "";
         }
     }
 }

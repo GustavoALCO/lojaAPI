@@ -2,6 +2,7 @@
 using loja_api.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace loja_api.EndpointsHandlers;
 
@@ -100,26 +101,7 @@ public class Userhandler
         }
     }
 
-    public static async Task<Results<Ok<UserDTO>, BadRequest<string>>> UpdateLogin(UserServices userServices,
-                                                                        [FromBody]
-                                                                         UserLoginDTO UpdateUser)
-    {
-        try
-        {
-            var user = await userServices.UpdateLogin(UpdateUser);
-
-            if (user == null)
-                return TypedResults.BadRequest("Nao foi possivel Alterar, Verifique o console para mais erros");
-
-            return TypedResults.Ok(user);
-        }
-        catch (Exception ex)
-        {
-            return TypedResults.BadRequest(ex.ToString());
-        }
-    }
-
-    public static async Task<Results<Ok, BadRequest<string>>> Login(UserServices userServices,
+    public static async Task<Results<Ok<string>, BadRequest<string>>> Login(UserServices userServices,
                                                     [FromBody]
                                                     UserLoginDTO UpdateUser)
     {
@@ -129,10 +111,10 @@ public class Userhandler
 
             
 
-            if (user == false)
-                return TypedResults.BadRequest("Nao foi possivel Alterar, Verifique o console para mais erros");
+            if (user.IsNullOrEmpty())
+                return TypedResults.BadRequest("Nao foi Possivel fazer o Login, Verifique o console para mais erros");
 
-            return TypedResults.Ok();
+            return TypedResults.Ok(user);
         }
         catch (Exception ex)
         {

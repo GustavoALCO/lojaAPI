@@ -99,25 +99,6 @@ public class EmployeeHandlers
         }
     }
 
-    public static async Task<Results<Ok<EmployeeDTO>, BadRequest<string>>> UpdateLogin(EmployeeService EmployeeService,
-                                                                        [FromBody]
-                                                                         EmployeeLoginDTO UpdateEmployee)
-    {
-        try
-        {
-            var Employee = await EmployeeService.UpdateLogin(UpdateEmployee);
-
-            if (Employee == null)
-                return TypedResults.BadRequest("Nao foi possivel Alterar, Verifique o console para mais erros");
-
-            return TypedResults.Ok(Employee);
-        }
-        catch (Exception ex)
-        {
-            return TypedResults.BadRequest(ex.ToString());
-        }
-    }
-
     public static async Task<Results<Ok, BadRequest<string>>> Login(EmployeeService EmployeeService,
                                                     [FromBody]
                                                     EmployeeLoginDTO UpdateEmployee)
@@ -129,7 +110,7 @@ public class EmployeeHandlers
 
 
             if (Employee == false)
-                return TypedResults.BadRequest("Nao foi possivel Alterar, Verifique o console para mais erros");
+                return TypedResults.BadRequest("Nao foi Possivel fazer o Login, Verifique o console para mais erros");
 
             return TypedResults.Ok();
         }
