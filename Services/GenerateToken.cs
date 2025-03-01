@@ -17,7 +17,7 @@ namespace loja_api.Services
         }
 
         // Método que gera o token JWT
-        public string GerarTokenLogin(string email, string employee = null)
+        public string GerarTokenLogin(string email, string employee = "")
         {
 
             var chaveScreta = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -29,7 +29,7 @@ namespace loja_api.Services
             var claims = new[]
             {
                 new Claim("login", email),
-                new Claim("Cargo", employee)
+                new Claim("Cargo", employee ?? "User")
                           
                 //adiciona no claim o nome do gerador do token
             };
