@@ -55,7 +55,7 @@ public class CupomService
         return cupom;
     }
 
-    public async Task<CupomDTO> CreateCupom(CupomCreateDTO cupomCreate)
+    public async Task<CupomDTO?> CreateCupom(CupomCreateDTO cupomCreate)
     {
         //Validando as Principais variaveis para a criação de um cupom 
         var validation = _validatorCreated.Validate(cupomCreate);
@@ -128,15 +128,20 @@ public class CupomService
 
     public async Task<string?> DeleteCupom(Guid Id)
     {
-        var cupom = await _DB.Cupom.FirstOrDefaultAsync(c => c.CupomId == Id);
-
-        if (cupom == null)
+        //Usa o ID passado para fazer uma busca no banco de dados para achar
+        var produto = await _DB.Products.FirstOrDefaultAsync(c => c.IdProducts == Id);
+        //Se retornar nulo entra em uma exeção para enviar uma mensagem de erro no log e retornar nulo
+        if (produto == null)
+        {
+            _logger.LogWarning("Produto Não Encontrado");
             return null;
+        }
+           
 
-        _DB.Remove(cupom);
+        _DB.Remove(produto);
 
         _DB.SaveChanges();
 
-        return "Cupom Excluido Com Sucesso";
+        return "Produto Excluido Com Sucesso";
     }
 }

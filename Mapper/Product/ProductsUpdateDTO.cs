@@ -2,6 +2,8 @@
 
 public class ProductsUpdateDTO
 {
+    public Guid IdProducts { get; set; }
+
     public string ProductName { get; set; }
 
     public string ProductDescription { get; set; }

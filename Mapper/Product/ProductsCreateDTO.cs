@@ -4,6 +4,7 @@ namespace loja_api.Mapper.Product;
 
 public class ProductsCreateDTO
 {
+    public Guid IdProducts { get; set; }
 
     public string ProductName { get; set; }
 

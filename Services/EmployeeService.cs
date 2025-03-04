@@ -23,7 +23,7 @@ public class EmployeeService
 
     private readonly HashService _hashService;
 
-    public EmployeeService(ContextDB DB, IMapper mapper, ILogger<CupomService> logger, IValidator<EmployeeCreateDTO> validatorCreated, IValidator<EmployeeUpdateDTO> validatorUpdate, HashService hashService)
+    public EmployeeService(ContextDB DB, IMapper mapper, ILogger<EmployeeDTO> logger, IValidator<EmployeeCreateDTO> validatorCreated, IValidator<EmployeeUpdateDTO> validatorUpdate, HashService hashService)
     {
         _DB = DB;
         _mapper = mapper;

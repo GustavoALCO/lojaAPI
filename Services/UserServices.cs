@@ -2,9 +2,7 @@
 using FluentValidation;
 using loja_api.Context;
 using loja_api.Entities;
-using loja_api.Mapper.Cupom;
 using loja_api.Mapper.User;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace loja_api.Services;
@@ -157,7 +155,7 @@ public class UserServices
             if (password == false)
                 return "";
 
-            return _generateToken.GerarTokenLogin(User.Email);
+            return _generateToken.GerarTokenLogin(User.Email,null);
         }
         catch (Exception ex)
         {
