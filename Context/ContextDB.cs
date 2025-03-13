@@ -17,7 +17,6 @@ public class ContextDB : DbContext
     public DbSet<Products> Products { get; set; }
     public DbSet<Storage> Storage { get; set; }
     public DbSet<MarketCart> MarketCart { get; set; }
-
     //para fazer a chamada do banco de dados
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -68,6 +67,9 @@ public class ContextDB : DbContext
         // Configuração de Auditable no Storage
         modelBuilder.Entity<Storage>()
             .OwnsOne(s => s.Auditable);
+
+        modelBuilder.Entity<MarketCart>()
+            .OwnsOne(m => m.AttDate);
 
         base.OnModelCreating(modelBuilder);
     }

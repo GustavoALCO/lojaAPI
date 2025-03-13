@@ -10,6 +10,8 @@ public class ProductsMarketCart
 
     public double Price { get; set; }
 
+    public string Payment {  get; set; }
+
     public Products Products { get; set; }
 
     public MarketCart MarketCart { get; set; }

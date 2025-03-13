@@ -11,7 +11,7 @@ public class MarketCartProfiles : Profile
     public MarketCartProfiles()
     {
         CreateMap<MarketCart, MarketCartDTO>()
-            .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.ProductsMarketCart
+            .ForMember(dest => dest.ProductsMarket, opt => opt.MapFrom(src => src.ProductsMarketCart
             .Select(mp => new ProductsMarketCart
             {
                 IdProducts = mp.Products.IdProducts,

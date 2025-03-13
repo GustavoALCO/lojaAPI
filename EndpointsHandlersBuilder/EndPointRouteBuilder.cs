@@ -92,4 +92,12 @@ public static class EndPointRouteBuilder
         loginEndPoints.MapPost("/Employee", EmployeeHandlers.Login)
             .WithSummary("Login Apenas para Usuarios");
     }
+
+    public static void RegisterMercadoPagoEndPoints(this IEndpointRouteBuilder EndPointRoute)
+    {
+        var route = EndPointRoute.MapGroup("/paymant");
+
+        route.MapPost("", MarketcartHandlers.CreatePaymentFromToken);
+    }
+
 }

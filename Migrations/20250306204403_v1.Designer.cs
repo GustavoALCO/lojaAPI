@@ -11,7 +11,7 @@ using loja_api.Context;
 namespace loja_api.Migrations
 {
     [DbContext(typeof(ContextDB))]
-    [Migration("20250226184544_v1")]
+    [Migration("20250306204403_v1")]
     partial class v1
     {
         /// <inheritdoc />
@@ -77,10 +77,6 @@ namespace loja_api.Migrations
             modelBuilder.Entity("loja_api.Entities.MarketCart", b =>
                 {
                     b.Property<Guid>("MarketCartId")
-                        .HasColumnType("TEXT");
-
-                    b.PrimitiveCollection<string>("AttDate")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("CupomId")
@@ -211,6 +207,10 @@ namespace loja_api.Migrations
                     b.Property<Guid>("IdProducts")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Payment")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<double>("Price")
                         .HasColumnType("REAL");
 
@@ -299,6 +299,32 @@ namespace loja_api.Migrations
                         .HasForeignKey("MarketCartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.OwnsMany("loja_api.Entities.auxiliar.Attdata", "AttDate", b1 =>
+                        {
+                            b1.Property<Guid>("MarketCartId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<string>("Assunto")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.Property<DateTime>("Data")
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("MarketCartId", "Id");
+
+                            b1.ToTable("Attdata");
+
+                            b1.WithOwner()
+                                .HasForeignKey("MarketCartId");
+                        });
+
+                    b.Navigation("AttDate");
 
                     b.Navigation("Cupom");
 

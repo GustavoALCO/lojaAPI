@@ -121,6 +121,7 @@ app.RegisterStorageEndPoints();
 app.RegisterUserEndPoints();
 app.RegisterEmployeeEndPoints();
 app.RegisterLoginEndPoints();
+app.RegisterMercadoPagoEndPoints();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

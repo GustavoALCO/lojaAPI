@@ -7,5 +7,6 @@ public class ProductMarketCartDTO
     public int Quantity { get; set; }
 
     public double Price { get; set; }
-}
 
+    public string Paymant {  get; set; }
+}

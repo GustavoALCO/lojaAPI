@@ -10,10 +10,10 @@ public class MarketCartDTO
 
     public Guid CupomId { get; set; }
 
-    public List<ProductMarketCartDTO> Products { get; set; }
+    public List<ProductMarketCartDTO> ProductsMarket { get; set; }
 
     public double Price { get; set; }
 
-    public IEnumerable<DateTime> AttDate { get; set; }
+    public Attdata AttDate { get; set; }
 }
 

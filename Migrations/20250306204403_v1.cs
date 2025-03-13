@@ -124,8 +124,7 @@ namespace loja_api.Migrations
                     MarketCartId = table.Column<Guid>(type: "TEXT", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     CupomId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Price = table.Column<double>(type: "REAL", nullable: false),
-                    AttDate = table.Column<string>(type: "TEXT", nullable: false)
+                    Price = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -145,13 +144,34 @@ namespace loja_api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Attdata",
+                columns: table => new
+                {
+                    MarketCartId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    Assunto = table.Column<string>(type: "TEXT", nullable: false),
+                    Data = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attdata", x => new { x.MarketCartId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_Attdata_MarketCart_MarketCartId",
+                        column: x => x.MarketCartId,
+                        principalTable: "MarketCart",
+                        principalColumn: "MarketCartId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductsMarketCart",
                 columns: table => new
                 {
                     MarketCartId = table.Column<Guid>(type: "TEXT", nullable: false),
                     IdProducts = table.Column<Guid>(type: "TEXT", nullable: false),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    Price = table.Column<double>(type: "REAL", nullable: false)
+                    Price = table.Column<double>(type: "REAL", nullable: false),
+                    Payment = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -190,6 +210,9 @@ namespace loja_api.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Attdata");
+
             migrationBuilder.DropTable(
                 name: "Employee");
 

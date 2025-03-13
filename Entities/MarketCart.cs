@@ -16,7 +16,7 @@ public class MarketCart
 
     public double Price { get; set; }
 
-    public IEnumerable<DateTime> AttDate { get; set; }
+    public Attdata AttDate { get; set; }
 
     public User User { get; set; }
 
