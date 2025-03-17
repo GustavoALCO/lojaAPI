@@ -97,7 +97,7 @@ public static class EndPointRouteBuilder
     {
         var route = EndPointRoute.MapGroup("/paymant");
 
-        route.MapPost("", MarketcartHandlers.CreatePaymentFromToken);
+        //route.MapPost("", MarketcartHandlers);
     }
 
 }

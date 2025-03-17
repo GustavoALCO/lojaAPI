@@ -10,17 +10,22 @@ using loja_api.Validators.Cupom;
 using loja_api.Validators.Employee;
 using loja_api.Validators.Storage;
 using loja_api.Validators.User;
+using MercadoPago.Client.Payment;
+using MercadoPago.Client.Preference;
+using MercadoPago.Config;
+using MercadoPago.Resource.Payment;
+using MercadoPago.Resource.Preference;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 
+MercadoPagoConfig.AccessToken = "PROD_ACCESS_TOKEN";
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -128,7 +133,33 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.MapPost("/pagamento", async (HttpContext context) =>
+{
+    var request = new PreferenceRequest
+    {
+        Items = new List<PreferenceItemRequest>
+    {
+        new PreferenceItemRequest
+        {
+            Title = "Meu produto",
+            Quantity = 1,
+            CurrencyId = "BRL",
+            UnitPrice = 0.01m,
+        },
 
+    },
+        Payer = new PreferencePayerRequest
+        {
+            Email = "alvescorrea.gustavo12@uni9.edu.br"
+        },
+    };
+
+    // Cria a preferência usando o client
+    var client = new PreferenceClient();
+    Preference preference = await client.CreateAsync(request);
+
+    return Results.Ok(preference);
+});
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
