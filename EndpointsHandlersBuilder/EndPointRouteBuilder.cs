@@ -1,4 +1,6 @@
-﻿namespace loja_api.EndpointsHandlers;
+﻿using loja_api.Services;
+
+namespace loja_api.EndpointsHandlers;
 
 public static class EndPointRouteBuilder
 {
@@ -97,7 +99,11 @@ public static class EndPointRouteBuilder
     {
         var route = EndPointRoute.MapGroup("/paymant");
 
-        //route.MapPost("", MarketcartHandlers);
+        route.MapPost("", MarketcartHandlers.CreateMarketCart);
+
+        route.MapPost("Teste", MarketcartHandlers.CreateMarketCartTeste);
+
+        route.MapPost("Webhook", MarketcartHandlers.WebHook);
     }
 
 }

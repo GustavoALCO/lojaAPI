@@ -7,5 +7,5 @@ public class Attdata
 {
     public List<string> Assunto { get; set; }    
 
-    public List<DateTime> Data {  get; set; }
+    public List<string> Data {  get; set; }
 }

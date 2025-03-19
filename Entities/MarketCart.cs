@@ -6,7 +6,7 @@ namespace loja_api.Entities;
 public class MarketCart
 {
     [Key]
-    public Guid MarketCartId { get; set; }
+    public string MarketCartId { get; set; }
 
     public Guid UserId { get; set; }
 
@@ -15,6 +15,8 @@ public class MarketCart
     public List<ProductsMarketCart> ProductsMarketCart { get; set; }
 
     public double Price { get; set; }
+
+    public string Paymant { get; set; }
 
     public Attdata AttDate { get; set; }
 
