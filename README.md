@@ -2,8 +2,9 @@
 
 - Este projeto tem como base fazer uma api para uma loja de ferramentas onde utilizara o Mercado Pago para realizar as transaçoes.
 Atualmente, o projeto está estruturado como um monólito para acelerar o desenvolvimento.
-** Link para o Repositorio em Clean Architecture: ** https://github.com/GustavoALCO/LojaApi-CleanArchitecture
-repositorio
+
+Link para o Repositorio em Clean Architecture: https://github.com/GustavoALCO/LojaApi-CleanArchitecture
+
 
 ## Ferramentas Utilizadas
 
